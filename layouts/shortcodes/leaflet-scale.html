@@ -5,5 +5,10 @@
 {{ $uniqueMapId := .Parent.Ordinal | safeJS }}
 
 <script>
-	map_options_{{ $uniqueMapId }}.scale = { enabled: true };
+	map_options_{{ $uniqueMapId }}.scale = {
+		enabled: true,
+		{{ with .Get "position" }}
+		position: {{ . }},
+		{{ end }}
+	};
 </script>
