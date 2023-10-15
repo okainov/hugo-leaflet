@@ -16,4 +16,7 @@
 		apiKey: '{{ . }}',
 		{{ end }}
 	};
+	{{ with .Get "selectorPosition" }}
+	map_options_{{ $uniqueMapId }}.layers.position = {{ . }};
+	{{ end }}
 </script>
