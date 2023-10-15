@@ -10,5 +10,23 @@
 		{{ with .Get "resizable" }}
 		resizable: {{ . }},
 		{{ end }}
+		{{ with .Get "width" }}
+		width: {{ . }},
+		{{ end }}
+		{{ with .Get "height" }}
+		height: {{ . }},
+		{{ end }}
+		{{ with .Get "minWidth" }}
+		minWidth: {{ . }},
+		{{ end }}
+		{{ with .Get "minHeight" }}
+		minHeight: {{ . }},
+		{{ end }}
+		{{ with .Get "maxWidth" }}
+		maxWidth: {{ . }},
+		{{ end }}
+		{{ with .Get "maxHeight" }}
+		maxHeight: {{ . }},
+		{{ end }}
 	};
 </script>
