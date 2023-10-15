@@ -1,0 +1,13 @@
+{{ if or (not .Parent) (not (eq .Parent.Name "leaflet-map")) }}
+{{ errorf "%s: cannot be used outside leaflet-map: %s" .Name .Position }}
+{{ end }}
+
+{{ if not (isset .Params "path") }}
+{{ errorf "%s: missing 'path' parameter: %s" .Name .Position }}
+{{ end }}
+
+{{ $uniqueMapId := .Parent.Ordinal | safeJS }}
+
+<script>
+	map_options_{{ $uniqueMapId }}.tracks.push({{ .Get "path" }})
+</script>

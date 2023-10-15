@@ -1,0 +1,132 @@
+{{/*
+
+Syntax summary:
+
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT >}}
+
+		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
+
+		{{< leaflet-marker lat=FLOAT lon=FLOAT >}}
+
+		{{< leaflet-track path="URL" >}}
+
+		{{< leaflet-scale >}}
+
+		{{< leaflet-elevation-profile resizable=BOOL >}}
+
+	{{< /leaflet-map >}}
+
+Map options:
+
+	centerLat/centerLon:
+		Center point coordinates of the map as decimal values. Optional iif tracks or markers are given.
+	zoom:
+		Zoom level of the map. Optional iif tracks or markers are given.
+
+Layer options:
+
+	id:
+		Name of the layer. Supported:
+		- openStreetMap: https://www.openstreetmap.org/
+		- openCycleMap: https://www.thunderforest.com/maps/opencyclemap/ (*)
+		- outdoors: https://www.thunderforest.com/maps/outdoors/ (*)
+		- landscape: https://www.thunderforest.com/maps/landscape/ (*)
+		(*) API key required
+	apiKey:
+		API key for tile access.
+
+Marker options:
+
+	lat/lon:
+		Coordinates of the marker as decimal values.
+
+Track options:
+
+	path:
+		Absolute or relative path of the .gpx file to render as a track.
+
+Scale options:
+
+	(none)
+
+Elevation profile options:
+
+	resizable:
+		Boolean value indicating whether the elevation profile box should be drag & drop resizable.
+		Optional, defaults to false.
+
+	Note: Elevation profiles are only supported if exactly one track is present.
+
+*/}}
+
+{{ $uniqueId := .Ordinal | safeJS }}
+
+<div id="map_container_{{ $uniqueId }}" class="map-container">
+	<div id="map_{{ $uniqueId }}" class="map"></div>
+	<div id="map_backdrop_{{ $uniqueId }}" class="map-backdrop"></div>
+	<div id="map_attribution_{{ $uniqueId }}" class="map-attribution"></div>
+</div>
+
+<script>
+	var map_options_{{ $uniqueId }} = {
+		element: 'map_{{ $uniqueId }}',
+		center: null,
+		zoom: null,
+		layers: {
+			enabled: [],
+		},
+		scale: false,
+		markers: [],
+		tracks: [],
+		heightgraph: null,
+	};
+</script>
+
+{{ .Inner }}
+
+<script>
+	$(document).ready(function() {
+		{
+			var lat  = {{ .Get "centerLat" | default "null" | safeJS }};
+			var lon  = {{ .Get "centerLon" | default "null" | safeJS }};
+			var zoom = {{ .Get "zoom"      | default "null" | safeJS }};
+			const needCenterAndZoom = map_options_{{ $uniqueId }}.markers.length == 0 && map_options_{{ $uniqueId }}.tracks.length == 0;
+			if (needCenterAndZoom && (lat === null || lon === null || zoom === null))
+			{
+				$('#map_{{ $uniqueId }}').text("ERROR: Map without markers or tracks requires 'centerLat', 'centerLon', and 'zoom' parameters.");
+				return;
+			}
+			if (lat !== null && lon !== null)
+			{
+				map_options_{{ $uniqueId }}.center = {
+					lat: lat,
+					lon: lon,
+				};
+			}
+			if (zoom !== null)
+			{
+				map_options_{{ $uniqueId }}.zoom = zoom;
+			}
+		}
+
+		// Create the map
+		var map = Quip.createTrackMap(map_options_{{ $uniqueId }});
+
+		// Make the map resizable
+		$('#map_container_{{ $uniqueId }}').resizable({
+			handles: 'e, s, se',
+			resize: () => map.invalidateSize(),
+		});
+
+		// Move the Leaflet attribution out of the map container
+		$('#map_attribution_{{ $uniqueId }}').append(
+			$('.leaflet-control-attribution')
+		);
+
+		// Restore the map when clicking outside the maximized map
+		{
+			const backdrop = L.DomUtil.get('map_backdrop_{{ $uniqueId }}');
+			backdrop.addEventListener('click', ev => { map.restore(); });
+		}
+	});
+</script>
