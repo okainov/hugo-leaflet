@@ -9,7 +9,6 @@
 .ui-icon {
 	background-image: url('/images/resize-handle-se.png');
 	background-position: -1px -1px;
-	z-index: 400 !important;	/* make sure it overlays the map since we don't have a border yet */
 }
 
 .map {
