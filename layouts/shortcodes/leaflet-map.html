@@ -2,7 +2,7 @@
 
 Syntax summary:
 
-	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT >}}
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" >}}
 
 		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -22,6 +22,12 @@ Map options:
 		Center point coordinates of the map as decimal values. Optional iif tracks or markers are given.
 	zoom:
 		Zoom level of the map. Optional iif tracks or markers are given.
+	width:
+		Width of the map, including CSS units (e.g. "50%", "300px").
+		Optional, defaults to "600px".
+	height:
+		Height of the map, including CSS units (e.g. "50%", "300px").
+		Optional, defaults to "400px".
 
 Layer options:
 
@@ -84,7 +90,7 @@ Elevation profile options:
 
 {{ $uniqueId := .Ordinal | safeJS }}
 
-<div id="map_container_{{ $uniqueId }}" class="map-container">
+<div id="map_container_{{ $uniqueId }}" class="map-container" style="width: {{ .Get "width" | default "600px" }}; height: {{ .Get "height" | default "400px" }};">
 	<div id="map_{{ $uniqueId }}" class="map"></div>
 	<div id="map_backdrop_{{ $uniqueId }}" class="map-backdrop"></div>
 	<div id="map_attribution_{{ $uniqueId }}" class="map-attribution"></div>
