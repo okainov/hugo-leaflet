@@ -62,7 +62,7 @@ svg.heightgraph-container .select-symbol {
 	top: 5%;
 	border: 2px solid white;
 	border-radius: 8px;
-	z-index: 1; /* above the backdrop */
+	z-index: 1001; /* above the backdrop */
 }
 
 .map-backdrop {
@@ -80,7 +80,7 @@ svg.heightgraph-container .select-symbol {
 
 .map.leaflet-maximized ~ .map-backdrop {
 	display: block;
-	z-index: 0;
+	z-index: 1000; /* some leaflet controls use 400. top that. */
 }
 
 .map.leaflet-maximized ~ .map-attribution {
