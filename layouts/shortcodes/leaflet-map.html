@@ -143,7 +143,7 @@ Elevation profile options:
 
 		// Move the Leaflet attribution out of the map container
 		$('#map_attribution_{{ $uniqueId }}').append(
-			$('.leaflet-control-attribution')
+			$('#map_container_{{ $uniqueId }} .leaflet-control-attribution')
 		);
 
 		// Restore the map when clicking outside the maximized map
