@@ -24,10 +24,10 @@ Map options:
 		Zoom level of the map. Optional iif tracks or markers are given.
 	width:
 		Width of the map, including CSS units (e.g. "50%", "300px").
-		Optional, defaults to "600px".
+		Optional, defaults to "auto".
 	height:
 		Height of the map, including CSS units (e.g. "50%", "300px").
-		Optional, defaults to "400px".
+		Optional, defaults to "50vh".
 
 Layer options:
 
@@ -90,7 +90,7 @@ Elevation profile options:
 
 {{ $uniqueId := .Ordinal | safeJS }}
 
-<div id="map_container_{{ $uniqueId }}" class="map-container" style="width: {{ .Get "width" | default "600px" }}; height: {{ .Get "height" | default "400px" }};">
+<div id="map_container_{{ $uniqueId }}" class="map-container" style="width: {{ .Get "width" | default "auto" }}; height: {{ .Get "height" | default "50vh" }};">
 	<div id="map_{{ $uniqueId }}" class="map"></div>
 	<div id="map_backdrop_{{ $uniqueId }}" class="map-backdrop"></div>
 	<div id="map_attribution_{{ $uniqueId }}" class="map-attribution"></div>
