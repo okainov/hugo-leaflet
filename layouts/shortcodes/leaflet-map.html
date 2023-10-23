@@ -2,7 +2,7 @@
 
 Syntax summary:
 
-	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL >}}
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL >}}
 
 		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -30,6 +30,9 @@ Map options:
 		Optional, defaults to "50vh".
 	resizable:
 		Boolean value indicating whether the map should be drag & drop resizable.
+		Optional, defaults to true.
+	maximizable:
+		Boolean value indicating whether the maximize button should be displayed.
 		Optional, defaults to true.
 
 Layer options:
@@ -111,6 +114,9 @@ Elevation profile options:
 			enabled: [],
 		},
 		scale: false,
+		maximize: {
+			enabled: {{ .Get "maximizable" | default "true" }},
+		},
 		markers: [],
 		tracks: [],
 		heightgraph: null,
