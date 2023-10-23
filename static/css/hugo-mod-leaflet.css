@@ -1,4 +1,5 @@
 .map-container {
+	position: relative;
 	padding: 6px 6px 18px 6px;
 	background: #eee;
 	border-radius: 8px;
@@ -28,7 +29,6 @@
 }
 
 .map-attribution {
-	position: absolute;
 	left: 0px;
 	bottom: 3px;
 	font-size: 11px;
