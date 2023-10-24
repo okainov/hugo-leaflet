@@ -2,7 +2,7 @@
 
 Syntax summary:
 
-	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" >}}
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL >}}
 
 		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -12,7 +12,7 @@ Syntax summary:
 
 		{{< leaflet-scale >}}
 
-		{{< leaflet-elevation-profile resizable=BOOL >}}
+		{{< leaflet-elevation-profile expanded=BOOL resizable=BOOL width=INT height=INT minWidth=INT minHeight=INT maxWidth=INT maxHeight=INT >}}
 
 	{{< /leaflet-map >}}
 
@@ -28,6 +28,12 @@ Map options:
 	height:
 		Height of the map, including CSS units (e.g. "50%", "300px").
 		Optional, defaults to "50vh".
+	resizable:
+		Boolean value indicating whether the map should be drag & drop resizable.
+		Optional, defaults to true.
+	maximizable:
+		Boolean value indicating whether the maximize button should be displayed.
+		Optional, defaults to true.
 
 Layer options:
 
@@ -65,6 +71,9 @@ Elevation profile options:
 	resizable:
 		Boolean value indicating whether the elevation profile box should be drag & drop resizable.
 		Optional, defaults to false.
+	expanded:
+		Boolean value indicating whether the elevation profile should be expanded by default.
+		Optional, defaults to true.
 	width:
 		Width of the elevation profile.
 		Optional, defaults to 360.
@@ -105,6 +114,9 @@ Elevation profile options:
 			enabled: [],
 		},
 		scale: false,
+		maximize: {
+			enabled: {{ .Get "maximizable" | default "true" }},
+		},
 		markers: [],
 		tracks: [],
 		heightgraph: null,
@@ -141,11 +153,13 @@ Elevation profile options:
 		// Create the map
 		var map = Quip.createTrackMap(map_options_{{ $uniqueId }});
 
+		{{ if .Get "resizable" | default "true" }}
 		// Make the map resizable
 		$('#map_container_{{ $uniqueId }}').resizable({
 			handles: 'e, s, se',
 			resize: () => map.invalidateSize(),
 		});
+		{{ end }}
 
 		// Move the Leaflet attribution out of the map container
 		$('#map_attribution_{{ $uniqueId }}').append(
