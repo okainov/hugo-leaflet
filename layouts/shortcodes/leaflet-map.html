@@ -38,12 +38,34 @@ Map options:
 Layer options:
 
 	id:
-		Name of the layer. Supported:
-		- openStreetMap: https://www.openstreetmap.org/
-		- openCycleMap: https://www.thunderforest.com/maps/opencyclemap/ (*)
-		- outdoors: https://www.thunderforest.com/maps/outdoors/ (*)
-		- landscape: https://www.thunderforest.com/maps/landscape/ (*)
-		(*) API key required
+		Name of the layer. Supported base layers:
+		- org.openstreetmap.standard:
+			https://www.openstreetmap.org/
+		- com.thunderforest.cycle: ①
+			https://www.thunderforest.com/maps/opencyclemap/
+		- com.thunderforest.outdoors: ①
+			https://www.thunderforest.com/maps/outdoors/
+		- com.thunderforest.landscape: ①
+			https://www.thunderforest.com/maps/landscape/
+		- ch.swisstopo.pixelkarte-farbe: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en
+		- ch.swisstopo.swissimage: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.swissimage&lang=en
+		Supported overlays:
+		- ch.swisstopo.swisstlm3d-wanderwege: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en&layers=ch.swisstopo.swisstlm3d-wanderwege&layers_opacity=0.8
+		- ch.astra.mountainbikeland: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en&layers=ch.astra.mountainbikeland&layers_opacity=0.6
+		- ch.astra.veloland: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en&layers=ch.astra.veloland&layers_opacity=0.6
+		- ch.swisstopo.schneeschuhwandern: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en&layers=ch.swisstopo.schneeschuhwandern
+		- ch.swisstopo-karto.schneeschuhrouten: ②
+			https://map.geo.admin.ch/?topic=swisstopo&bgLayer=ch.swisstopo.pixelkarte-farbe&lang=en&layers=ch.swisstopo-karto.schneeschuhrouten&layers_opacity=0.8
+		Notes:
+			① API key required.
+			② Uses EPSG-2056 (Swiss CH1903+/LV95) projection. Cannot be combined with EPSG3857
+			  (WGS 84) map layers.
 	apiKey:
 		API key for tile access.
 	selectorPosition:
