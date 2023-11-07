@@ -23,6 +23,13 @@
 	border-radius: 8px;
 }
 
+/* Prevent styling from accidentally adding a margin to <img> elements. Leaflet tiles are such
+   elements and adding a margin creates a hard-to-notice and hard-to-debug offset in map tiles.
+   This problem has been observed when embedding maps within a @tailwindcss/typography <article>. */
+.map-container img {
+	margin: 0px;
+}
+
 /* Heightgraph grid lines */
 .map .heightgraph .grid .tick line {
 	stroke: #ccc;
