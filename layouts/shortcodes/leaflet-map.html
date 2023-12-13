@@ -137,7 +137,7 @@ Elevation profile options:
 		},
 		scale: false,
 		maximize: {
-			enabled: {{ .Get "maximizable" | default "true" }},
+			enabled: {{ .Get "maximizable" | default "true" | safeJS }},
 		},
 		markers: [],
 		tracks: [],
