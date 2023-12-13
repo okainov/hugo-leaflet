@@ -139,6 +139,10 @@ Elevation profile options:
 		maximize: {
 			enabled: {{ .Get "maximizable" | default "true" | safeJS }},
 		},
+		freeze: {
+			enabled: true,
+			hoverToThawDuration: 1500,
+		},
 		markers: [],
 		tracks: [],
 		heightgraph: null,
