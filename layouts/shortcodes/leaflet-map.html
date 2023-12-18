@@ -119,7 +119,7 @@ Elevation profile options:
 
 */}}
 
-{{ $uniqueId := .Ordinal | safeJS }}
+{{ $uniqueId := (printf "%s:%d" .Page.File.UniqueID .Ordinal) | md5 | safeJS }}
 
 <div id="map_container_{{ $uniqueId }}" class="map-container" style="width: {{ .Get "width" | default "auto" }}; height: {{ .Get "height" | default "50vh" }};">
 	<div id="map_{{ $uniqueId }}" class="map"></div>

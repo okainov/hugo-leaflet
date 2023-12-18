@@ -6,7 +6,7 @@
 {{ errorf "%s: missing 'id' parameter: %s" .Name .Position }}
 {{ end }}
 
-{{ $uniqueMapId := .Parent.Ordinal | safeJS }}
+{{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
 
 {{ $id := .Get "id" }}
 <script>

@@ -6,7 +6,7 @@
 {{ errorf "%s: missing 'path' parameter: %s" .Name .Position }}
 {{ end }}
 
-{{ $uniqueMapId := .Parent.Ordinal | safeJS }}
+{{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
 
 <script>
 	map_options_{{ $uniqueMapId }}.tracks.push({{ .Get "path" }})
