@@ -9,5 +9,10 @@
 {{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
 
 <script>
-	map_options_{{ $uniqueMapId }}.tracks.push({{ .Get "path" }})
+	map_options_{{ $uniqueMapId }}.tracks.push({
+		source: {{ .Get "path" }},
+		title: {{ .Get "title" | default ("null" | safeJS) }},
+		// Internal use, ignored by quip-maps
+		downloadable: {{ .Get "downloadable" | default "true" | safeJS }},
+	})
 </script>
