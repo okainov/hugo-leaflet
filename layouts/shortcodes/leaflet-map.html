@@ -2,7 +2,7 @@
 
 Syntax summary:
 
-	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL >}}
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL freezable=BOOL freezeOptions="STRING" >}}
 
 		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -34,6 +34,15 @@ Map options:
 	maximizable:
 		Boolean value indicating whether the maximize button should be displayed.
 		Optional, defaults to true.
+	freezable:
+		Boolean value indicating whether the map should be frozen on page load to avoid scroll capture.
+		Optional, defaults to true.
+	freezeOptions:
+		A string containing a JSON object (without its braces) that contains options for Leaflet.Freezy.
+		See https://gitlab.com/mrubli/leaflet-freezy#options for details.
+		Optional, defaults to: "freezeButtonInnerHtml: 1500"
+		Example: freezeOptions="hoverToThawDuration: 500, freezeButtonInnerHtml: '🥶'"
+		Example: freezeOptions=" "   (to avoid the hugo-mod-leaflet default and use Leaflet.Freezy's defaults instead)
 
 Layer options:
 
@@ -147,8 +156,8 @@ Elevation profile options:
 			enabled: {{ .Get "maximizable" | default "true" | safeJS }},
 		},
 		freeze: {
-			enabled: true,
-			hoverToThawDuration: 1500,
+			enabled: {{ .Get "freezable" | default "true" | safeJS }},
+			{{ .Get "freezeOptions" | default "hoverToThawDuration: 1500" | safeJS }}
 		},
 		markers: [],
 		tracks: [],
