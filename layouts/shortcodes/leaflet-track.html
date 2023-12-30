@@ -12,6 +12,8 @@
 	map_options_{{ $uniqueMapId }}.tracks.push({
 		source: {{ .Get "path" }},
 		title: {{ .Get "title" | default ("null" | safeJS) }},
+		color: {{ .Get "color" | default ("null" | safeJS) }},
+		opacity: {{ .Get "opacity" | default ("null" | safeJS) }},
 		// Internal use, ignored by quip-maps
 		downloadable: {{ .Get "downloadable" | default "true" | safeJS }},
 	})
