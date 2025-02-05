@@ -157,12 +157,12 @@ Elevation profile options:
 		layers: {
 			enabled: [],
 		},
-		scale: false,
+		scale: {enabled: true, position: "bottomright"},
 		maximize: {
 			enabled: {{ .Get "maximizable" | default "true" | safeJS }},
 		},
 		freeze: {
-			enabled: {{ .Get "freezable" | default "true" | safeJS }},
+			enabled: {{ .Get "freezable" | default "false" | safeJS }},
 			{{ .Get "freezeOptions" | default "hoverToThawDuration: 1500" | safeJS }}
 		},
 		markers: [],
