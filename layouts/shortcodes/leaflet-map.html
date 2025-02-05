@@ -155,7 +155,22 @@ Elevation profile options:
 		center: null,
 		zoom: null,
 		layers: {
-			enabled: [],
+			"enabled": [
+				"com.thunderforest.cycle",
+				"com.thunderforest.outdoors",
+				"com.thunderforest.landscape",
+				"org.openstreetmap.standard"
+			],
+			"com.thunderforest.cycle": {
+				"apiKey": "INSERTME"
+			},
+			"com.thunderforest.outdoors": {
+				"apiKey": "INSERTME"
+			},
+			"com.thunderforest.landscape": {
+				"apiKey": "INSERTME"
+			},
+			"org.openstreetmap.standard": {}
 		},
 		scale: {enabled: true, position: "bottomright"},
 		maximize: {
