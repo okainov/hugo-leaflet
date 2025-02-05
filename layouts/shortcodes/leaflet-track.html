@@ -7,14 +7,21 @@
 {{ end }}
 
 {{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
+{{ $track := $.Page.Resources.GetMatch (.Get "path") }}
 
-<script>
-	map_options_{{ $uniqueMapId }}.tracks.push({
-		source: {{ .Get "path" }},
-		title: {{ .Get "title" | default ("null" | safeJS) }},
-		color: {{ .Get "color" | default ("null" | safeJS) }},
-		opacity: {{ .Get "opacity" | default ("null" | safeJS) }},
-		// Internal use, ignored by quip-maps
-		downloadable: {{ .Get "downloadable" | default "true" | safeJS }},
-	})
-</script>
+
+{{ if $track }}
+	{{ $track.Publish }}
+	<script>
+		map_options_{{ $uniqueMapId }}.tracks.push({
+			source: {{ .Get "path" }},
+			title: {{ .Get "title" | default ("null" | safeJS) }},
+			color: {{ .Get "color" | default ("DarkRed") }},
+			opacity: {{ .Get "opacity" | default ("null" | safeJS) }},
+			// Internal use, ignored by quip-maps
+			downloadable: {{ .Get "downloadable" | default "true" | safeJS }},
+		})
+	</script>
+{{ else }}
+	<p class="ctr legal bg-red-400"><em>No track found!</em></p>
+{{ end }}
