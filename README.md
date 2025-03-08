@@ -1,28 +1,108 @@
 # hugo-mod-leaflet: Leaflet integration for Hugo
 
-This module provies a number of Hugo shortcodes for easy embedding of maps into Hugo-based websites.
+This module provides a number of Hugo shortcodes for easy embedding of maps into Hugo-based websites.
 
-## Example
+## Setup
+
+In order to use it, you need to include the initial scripts/css into HEAD, so add something like this into your `layouts/partials/head.html` (assuming you have it, if not, please refer to your theme documentation how to add extra stuff in head)
+
+```go-html-template
+{{ if .HasShortcode "leaflet-map" }}
+    {{ partial "leaflet-loader" . }}
+{{ end }}
+```
+
+This will include theme's CSS and JS as well as [Leaflet](https://leafletjs.com/index.html) itself and [leaflet-elevation](https://github.com/Raruto/leaflet-elevation). It doesn't have any other dependencies (for example, no jQuery).
+
+
+## Examples
 
 Here's an example use of the map shortcodes provided by hugo-mod-leaflet:
 
 ```go-html-template
-{{< leaflet-map resizable=false >}}
-    {{< leaflet-layer id="ch.swisstopo.pixelkarte-farbe" selectorPosition="bottomleft" >}}
-    {{< leaflet-layer id="ch.swisstopo.swissimage" >}}
-    {{< leaflet-layer id="ch.swisstopo.swisstlm3d-wanderwege" >}}
+{{< leaflet-map >}}
 
-    {{< leaflet-scale position="bottomright" >}}
+    {{< leaflet-track path="track.gpx" >}}
 
-    {{< leaflet-track path="track.gpx" color="DarkRed" >}}
-
-    {{< leaflet-elevation-profile expanded=true resizable=true width=300 height=150 >}}
+    {{< leaflet-elevation-profile  >}}
 {{< /leaflet-map >}}
 ```
 
 And below is how this might render:
 
-![alt text](doc/render-example.png){width=792px}
+![alt text](doc/render-example.png)
+
+If you do not want elevation graph, then omit `leaflet-elevation-profile`:
+
+```go-html-template
+{{< leaflet-map >}}
+
+    {{< leaflet-track path="track.gpx" >}}
+
+{{< /leaflet-map >}}
+```
+
+
+![alt text](doc/render-example-2.png)
+
+
+### Posts with coordinates map example
+It also can be used to display markers and, as an incredibly cool feature, creating a map of your posts with different colored markers.
+
+Add coordinates to your posts (`.md` files):
+```html
+---
+OSM_geo_data:
+  - 50.119321,5.991232
+---
+```
+
+Create some custom shortcode like `mymap.html`. It should check all posts which are visible and have `osm_geo_data` parameter, and then create a marker for it with some information. 
+```html
+
+{{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
+
+{{- range .Site.Sites -}}
+    {{- $pages := where .RegularPages "Params.hidden" "!=" true -}}
+    {{- range $pages -}}
+		{{- $page := . -}}
+		{{- if .Params.osm_geo_data -}}
+			{{- $cover := .Params.image | default "" -}}
+			{{- range .Params.osm_geo_data -}}
+				{{- $parts := split . "," -}}
+				{{- $lat := index $parts 0 -}}
+				{{- $lon := index $parts 1 -}}
+				{{ $dateHuman := $page.Date | time.Format ":date_medium" }}
+                {{- $popupText := printf "<div><h3>%s</h3>(%s)%s<p>%s</p><a href='%s' target='_blank'>Go to</a></div>" 
+    $page.Title 
+    $dateHuman
+    (cond (ne $cover "") (printf "<img src='%s' style='max-width:100%%; height:auto;' />" $cover) "")
+    $page.Description 
+    $page.Permalink 
+-}}
+                <script>map_options_{{ $uniqueMapId }}.markers.push({ lat: {{ $lat }}, lon: {{ $lon }}, popup: "{{$popupText}}", year: "{{$page.Date.Year}}" })</script>
+			{{- end -}}
+		{{- end -}}
+    {{- end -}}
+{{- end -}}
+
+
+
+
+```
+
+Note `year: "{{$page.Date.Year}}" })` parameter that we add here to `map_options.markers[]`. This is used in `hugo-leaflet.js` to create different colors for markers.
+
+And put it all together in some new page:
+
+```html
+{{< leaflet-map >}}
+{{< mymap >}}
+{{< /leaflet-map >}}
+```
+
+
+![alt text](doc/render-example-3.png)
 
 ## Documentation
 
@@ -31,7 +111,7 @@ The current shortcode documentation is contained at the top of [leaflet-map.html
 ### Syntax summary
 
 ```go-html-template
-{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL freezable=BOOL freezeOptions="STRING" >}}
+{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL  >}}
 
 	{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -65,15 +145,7 @@ resizable:
 maximizable:
 	Boolean value indicating whether the maximize button should be displayed.
 	Optional, defaults to true.
-freezable:
-	Boolean value indicating whether the map should be frozen on page load to avoid scroll capture.
-	Optional, defaults to true.
-freezeOptions:
-	A string containing a JSON object (without its braces) that contains options for Leaflet.Freezy.
-	See https://gitlab.com/mrubli/leaflet-freezy#options for details.
-	Optional, defaults to: "freezeButtonInnerHtml: 1500"
-	Example: freezeOptions="hoverToThawDuration: 500, freezeButtonInnerHtml: '🥶'"
-	Example: freezeOptions=" "   (to avoid the hugo-mod-leaflet default and use Leaflet.Freezy's defaults instead)
+
 ```
 
 ### Layer options
@@ -140,14 +212,6 @@ downloadable:
 	Optional, defaults to true.
 ```
 
-### Scale options
-
-```
-position:
-	Position of the scale. One of: "topleft", "topright", "bottomleft", "bottomright"
-	Optional, defaults to "bottomright".
-```
-
 ### Elevation profile options
 
 ```
@@ -178,3 +242,7 @@ maxHeight:
 
 Note: Elevation profiles are only supported if exactly one track is present.
 ```
+
+## Dedications
+
+This repo is based on original project https://gitlab.com/mrubli/hugo-mod-leaflet, thanks for the efforts and creating this!
