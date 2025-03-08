@@ -2,7 +2,7 @@
 
 Syntax summary:
 
-	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL freezable=BOOL freezeOptions="STRING" >}}
+	{{< leaflet-map centerLat=FLOAT centerLon=FLOAT zoom=INT width="STRING" height="STRING" resizable=BOOL maximizable=BOOL >}}
 
 		{{< leaflet-layer id="STRING" apiKey="STRING" >}}
 
@@ -34,15 +34,6 @@ Map options:
 	maximizable:
 		Boolean value indicating whether the maximize button should be displayed.
 		Optional, defaults to true.
-	freezable:
-		Boolean value indicating whether the map should be frozen on page load to avoid scroll capture.
-		Optional, defaults to true.
-	freezeOptions:
-		A string containing a JSON object (without its braces) that contains options for Leaflet.Freezy.
-		See https://gitlab.com/mrubli/leaflet-freezy#options for details.
-		Optional, defaults to: "freezeButtonInnerHtml: 1500"
-		Example: freezeOptions="hoverToThawDuration: 500, freezeButtonInnerHtml: '🥶'"
-		Example: freezeOptions=" "   (to avoid the hugo-mod-leaflet default and use Leaflet.Freezy's defaults instead)
 
 Layer options:
 
@@ -152,6 +143,7 @@ Elevation profile options:
 <script>
 	var map_options_{{ $uniqueId }} = {
 		element: 'map_{{ $uniqueId }}',
+		id: '{{ $uniqueId }}',
 		center: null,
 		zoom: null,
 		layers: {
@@ -159,7 +151,7 @@ Elevation profile options:
 				"com.thunderforest.cycle",
 				"com.thunderforest.outdoors",
 				"com.thunderforest.landscape",
-				"org.openstreetmap.standard"
+				"org.openstreetmap.standard",
 			],
 			"com.thunderforest.cycle": {
 				"apiKey": "INSERTME"
@@ -176,10 +168,6 @@ Elevation profile options:
 		maximize: {
 			enabled: {{ .Get "maximizable" | default "true" | safeJS }},
 		},
-		freeze: {
-			enabled: {{ .Get "freezable" | default "false" | safeJS }},
-			{{ .Get "freezeOptions" | default "hoverToThawDuration: 1500" | safeJS }}
-		},
 		markers: [],
 		tracks: [],
 		heightgraph: null,
@@ -189,7 +177,7 @@ Elevation profile options:
 {{ .Inner }}
 
 <script>
-	$(document).ready(function() {
+	document.addEventListener('DOMContentLoaded',function(){
 		{
 			var lat  = {{ .Get "centerLat" | default "null" | safeJS }};
 			var lon  = {{ .Get "centerLon" | default "null" | safeJS }};
@@ -197,7 +185,7 @@ Elevation profile options:
 			const needCenterAndZoom = map_options_{{ $uniqueId }}.markers.length == 0 && map_options_{{ $uniqueId }}.tracks.length == 0;
 			if (needCenterAndZoom && (lat === null || lon === null || zoom === null))
 			{
-				$('#map_{{ $uniqueId }}').text("ERROR: Map without markers or tracks requires 'centerLat', 'centerLon', and 'zoom' parameters.");
+				document.getElementById('map_{{ $uniqueId }}').textContent  = "ERROR: Map without markers or tracks requires 'centerLat', 'centerLon', and 'zoom' parameters.";
 				return;
 			}
 			if (lat !== null && lon !== null)
@@ -212,21 +200,27 @@ Elevation profile options:
 				map_options_{{ $uniqueId }}.zoom = zoom;
 			}
 		}
-
 		// Create the map
-		var map = Quip.createTrackMap(map_options_{{ $uniqueId }});
+		var map = createHugoLeafletMap(map_options_{{ $uniqueId }});
 
-		{{ if .Get "resizable" | default "true" }}
+		{{ $resizable := .Get "resizable" }}
+		{{ if or (not $resizable) (eq $resizable "true") }}
 		// Make the map resizable
-		$('#map_container_{{ $uniqueId }}').resizable({
-			handles: 'e, s, se',
-			resize: () => map.invalidateSize(),
-		});
+          const mapContainer = document.getElementById('map_container_{{ $uniqueId }}');
+		  mapContainer.classList.toggle('resizable');
+
+          if (mapContainer) {
+            const resizeObserver = new ResizeObserver(() => {
+              map.invalidateSize();
+            });
+
+            resizeObserver.observe(mapContainer);
+          }
 		{{ end }}
 
 		// Move the Leaflet attribution out of the map container
-		$('#map_attribution_{{ $uniqueId }}').append(
-			$('#map_container_{{ $uniqueId }} .leaflet-control-attribution')
+		document.getElementById('map_attribution_{{ $uniqueId }}').appendChild(
+				document.querySelector(`#map_container_{{ $uniqueId }} .leaflet-control-attribution`)
 		);
 
 		// Restore the map when clicking outside the maximized map
@@ -234,26 +228,7 @@ Elevation profile options:
 			const backdrop = L.DomUtil.get('map_backdrop_{{ $uniqueId }}');
 			backdrop.addEventListener('click', ev => { map.restore(); });
 		}
-
-		// Create a download button for every downloadable track
-		for (const track of map_options_{{ $uniqueId }}.tracks)
-		{
-			if (!track.downloadable)
-				continue;
-
-			const a = L.DomUtil.create(
-				'a',
-				'me-2 mb-2',
-				L.DomUtil.get('map_track_downloads_{{ $uniqueId }}')
-			);
-			a.setAttribute('href', track.source);
-			const button = L.DomUtil.create(
-				'button',
-				// Note that the following classes must be part of the safelist in hugo-theme-gallery-flex's tailwind.config.js:
-				'py-2.5 px-5 me-2 mb-2 text-sm font-medium rounded-lg border focus:outline-none focus:z-10 focus:ring-4 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700',
-				a
-			);
-			button.innerHTML = track.title ? `Download GPX (${track.title})` : 'Download GPX';
-		}
 	});
 </script>
+
+<div class="heightgraph" id="heightgraph_{{ $uniqueId }}"></div>

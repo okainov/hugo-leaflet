@@ -5,9 +5,13 @@
 	border-radius: 8px;
 }
 
-.ui-icon {
-	background-image: url('../images/resize-handle-se.png');
-	background-position: -1px -1px;
+.resizable {
+	resize: both;  /* Allow resizing in both horizontal and vertical directions */
+	min-width: 100px;
+	min-height: 100px;
+	max-width: 100%;
+	max-height: 100%;
+	border: 1px solid #ccc; /* Optional: Visual indicator */
 }
 
 .map {
@@ -19,20 +23,12 @@
 	display: none;
 }
 
-.map .heightgraph-container {
-	border-radius: 8px;
-}
 
 /* Prevent styling from accidentally adding a margin to <img> elements. Leaflet tiles are such
    elements and adding a margin creates a hard-to-notice and hard-to-debug offset in map tiles.
    This problem has been observed when embedding maps within a @tailwindcss/typography <article>. */
 .map-container img {
 	margin: 0px;
-}
-
-/* Heightgraph grid lines */
-.map .heightgraph .grid .tick line {
-	stroke: #ccc;
 }
 
 .map-attribution {
@@ -49,15 +45,6 @@
 
 .leaflet-right .leaflet-control {
 	margin: 6px;
-}
-
-/* Heightgraph data point selector */
-svg.heightgraph-container .select-info {
-	display: none;
-}
-
-svg.heightgraph-container .select-symbol {
-	display: none;
 }
 
 /* Map style when maximized */

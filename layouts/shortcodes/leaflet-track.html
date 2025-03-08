@@ -18,10 +18,10 @@
 			title: {{ .Get "title" | default ("null" | safeJS) }},
 			color: {{ .Get "color" | default ("DarkRed") }},
 			opacity: {{ .Get "opacity" | default ("null" | safeJS) }},
-			// Internal use, ignored by quip-maps
-			downloadable: {{ .Get "downloadable" | default "true" | safeJS }},
+			downloadable: {{ .Get "downloadable" | default "false" | safeJS }},
 		})
 	</script>
 {{ else }}
 	<p class="ctr legal bg-red-400"><em>No track found!</em></p>
 {{ end }}
+

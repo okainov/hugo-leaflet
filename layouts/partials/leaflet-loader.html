@@ -1,12 +1,16 @@
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<script>
-	// Global object for quip-maps
-	const Quip = {};
-</script>
-<script src="{{ relURL "js/maps.bundle.js" }}"></script>
+<link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.min.css" />
+<script defer src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.min.js"></script>
 
-<link rel="stylesheet" href="{{ relURL "css/hugo-mod-leaflet.css" }}" />
+{{ $leafletJs := resources.Get "js/hugo-leaflet.js" }}
+{{- if hugo.IsProduction }}{{ $leafletJs = $leafletJs | minify | fingerprint }}{{ end -}}
+
+<script defer src="{{ $leafletJs.RelPermalink }}"></script>
+
+
+{{ $leafletCss := resources.Get "css/hugo-mod-leaflet.css" }}
+{{- if hugo.IsProduction }}{{ $leafletCss = $leafletCss | minify | fingerprint }}{{ end -}}
+
+<link rel="stylesheet" href="{{ $leafletCss.RelPermalink }}" />
