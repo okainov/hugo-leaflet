@@ -12,5 +12,5 @@
 {{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
 
 <script>
-	map_options_{{ $uniqueMapId }}.markers.push({ lat: {{ .Get "lat" }}, lon: {{ .Get "lon" }} })
+	map_options_{{ $uniqueMapId }}.markers.push({ lat: {{ .Get "lat" }}, lon: {{ .Get "lon" }}, popup: {{ .Get "popup" }}, tooltip: {{ .Get "tooltip" }} })
 </script>

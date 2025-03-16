@@ -70,9 +70,11 @@ function handleMarkers(mapOptions, map) {
     if (userMarker.popup) {
       marker.bindPopup(userMarker.popup);
     }
+    if (userMarker.tooltip) {
+      marker.bindTooltip(userMarker.tooltip);
+    }
     bounds.extend(L.latLng(userMarker));
   }
-  // Wait for all promises in 'a' to resolve
   setMapView(map, mapOptions, bounds);
 
   // Function to determine the best way to set the map view
@@ -298,6 +300,8 @@ function handleTracks(mapOptions, map) {
     // Render chart profiles as Canvas or SVG Paths
     preferCanvas: true,
     // height: 150, // Height of the graph
+
+    srcFolder: 'http://localhost:1313/assets/leaflet-elevation/src/',
 
   };
   if (tracks) {

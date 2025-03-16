@@ -1,8 +1,24 @@
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="dns-prefetch" href="https://tile.openstreetmap.org">
 
-<link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.min.css" />
-<script defer src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.min.js"></script>
+{{ $leafletLibJs := resources.Get "assets/leaflet/leaflet.js" }}
+{{- if hugo.IsProduction }}{{ $leafletLibJs = $leafletLibJs | minify | fingerprint }}{{ end -}}
+{{ $leafletLibCss := resources.Get "assets/leaflet/leaflet.css" }}
+{{- if hugo.IsProduction }}{{ $leafletLibCss = $leafletLibCss | minify | fingerprint }}{{ end -}}
+
+{{ $files := resources.Match "assets/leaflet/images/*" }}
+{{ range $files }}
+    {{ .Publish }}
+{{ end }}
+
+<link rel="stylesheet" href="{{ $leafletLibCss.RelPermalink }}" />
+<script defer src="{{ $leafletLibJs.RelPermalink }}" ></script>
+
+{{ $leafletEleJs := resources.Get "assets/leaflet/leaflet-elevation.min.js" }}
+{{ $leafletEleCss := resources.Get "assets/leaflet/leaflet-elevation.min.css" }}
+{{- if hugo.IsProduction }}{{ $leafletEleCss = $leafletEleCss | minify | fingerprint }}{{ end -}}
+{{- if hugo.IsProduction }}{{ $leafletEleJs = $leafletEleJs | minify | fingerprint }}{{ end -}}
+<link rel="stylesheet" href="{{ $leafletEleCss.RelPermalink }}" />
+<script defer src="{{ $leafletEleJs.RelPermalink }}"></script>
 
 {{ $leafletJs := resources.Get "js/hugo-leaflet.js" }}
 {{- if hugo.IsProduction }}{{ $leafletJs = $leafletJs | minify | fingerprint }}{{ end -}}
