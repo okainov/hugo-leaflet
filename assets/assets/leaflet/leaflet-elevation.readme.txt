@@ -1,0 +1,4 @@
+Two customizations made to get rid of CDN:
+
+- d3.min.js downloaded and placed into "libs" folder in static
+- in leaflet-elevation.min.js replaced path to D3 to __D3:"../libs/d3.min.js"

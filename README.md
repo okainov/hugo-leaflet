@@ -14,6 +14,11 @@ In order to use it, you need to include the initial scripts/css into HEAD, so ad
 
 This will include theme's CSS and JS as well as [Leaflet](https://leafletjs.com/index.html) itself and [leaflet-elevation](https://github.com/Raruto/leaflet-elevation). It doesn't have any other dependencies (for example, no jQuery).
 
+Because both `leaflet` and `leaflet-elevation` are directly included in this repo, you have two options:
+1. Remove the usage of the local files and include leaflet / leaflet-elevation from CDN.
+2. Use local copy, but then you need to modify `srcFolder` parameter in `hugo-leaflet.js`, because that's how 
+ leaflet-elevation finds D3 (visualisation library). It needs to be full URL, but default it's `http://localhost:1313/assets/leaflet-elevation/src/`
+
 
 ## Examples
 
