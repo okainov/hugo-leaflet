@@ -1,3 +1,3 @@
-module gitlab.com/mrubli/hugo-mod-leaflet.git
+module github.com/okainov/hugo-leaflet.git
 
 go 1.21.1
