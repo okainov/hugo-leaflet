@@ -217,7 +217,7 @@ function handleTracks(mapOptions, map) {
   // XXX: Some hack to see if at least one track has "downloadable" then use it for all
   const hasDownloadableTrack = tracks.some(track => track.downloadable === true);
   const noElevation = mapOptions.heightgraph == null;
-  const elevationOptions = {
+  let elevationOptions = {
     // Chart container outside/inside map container
     ruler: false,
     legend: false,
@@ -300,11 +300,12 @@ function handleTracks(mapOptions, map) {
     // Render chart profiles as Canvas or SVG Paths
     preferCanvas: true,
     // height: 150, // Height of the graph
-
-    // Needed to indicate from where to get d3
-    srcFolder: 'http://localhost:1313/assets/leaflet-elevation/src/',
-
   };
+
+  if (mapOptions.srcFolder) {
+    // Needed to indicate from where to get d3 if using local fileset
+    elevationOptions.srcFolder = mapOptions.srcFolder;
+  }
   if (tracks) {
     controlElevation = L.control.elevation(elevationOptions).addTo(map);
   }

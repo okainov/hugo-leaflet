@@ -201,6 +201,10 @@ Elevation profile options:
 				map_options_{{ $uniqueId }}.zoom = zoom;
 			}
 		}
+
+		{{ if and (not .Site.Params.modules.leaflet.useCdn) (.Site.Params.modules.leaflet.srcFolder) }}
+			map_options_{{ $uniqueId }}.srcFolder = "{{ .Site.Params.modules.leaflet.srcFolder | safeJS }}";
+		{{ end }}
 		// Create the map
 		var map = createHugoLeafletMap(map_options_{{ $uniqueId }});
 

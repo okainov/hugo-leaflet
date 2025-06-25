@@ -14,10 +14,34 @@ In order to use it, you need to include the initial scripts/css into HEAD, so ad
 
 This will include theme's CSS and JS as well as [Leaflet](https://leafletjs.com/index.html) itself and [leaflet-elevation](https://github.com/Raruto/leaflet-elevation). It doesn't have any other dependencies (for example, no jQuery).
 
-Because both `leaflet` and `leaflet-elevation` are directly included in this repo, you have two options:
-1. Remove the usage of the local files and include leaflet / leaflet-elevation from CDN.
-2. Use local copy, but then you need to modify `srcFolder` parameter in `hugo-leaflet.js`, because that's how 
- leaflet-elevation finds D3 (visualisation library). It needs to be full URL, but default it's `http://localhost:1313/assets/leaflet-elevation/src/`
+There are two options available:
+1. Use Leaflet and Leaflet-elevation from CDN. In order to enable this, you need to add config parameter to your site:
+```yaml
+params:
+  modules:
+    leaflet:
+      useCdn: true
+```
+```toml
+# in params.toml
+[modules.leaflet]
+    useCdn = true
+```
+2. Use embedded versions. Then you will need to modify `srcFolder` parameter in config, because that's how 
+ leaflet-elevation finds D3 (visualisation library).
+```yaml
+params:
+  modules:
+    leaflet:
+      useCdn: false
+      srcFolder: "http://localhost:1313/assets/leaflet-elevation/src/"
+```
+```toml
+# in params.toml
+[modules.leaflet]
+    useCdn = false
+    srcFolder = "http://localhost:1313/assets/leaflet-elevation/src/"
+```
 
 ### Configuration options
 
