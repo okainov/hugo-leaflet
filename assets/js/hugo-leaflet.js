@@ -301,7 +301,8 @@ function handleTracks(mapOptions, map) {
     preferCanvas: true,
     // height: 150, // Height of the graph
 
-    srcFolder: 'https://okainov.com/assets/leaflet-elevation/src/',
+    // Needed to indicate from where to get d3
+    srcFolder: 'http://localhost:1313/assets/leaflet-elevation/src/',
 
   };
   if (tracks) {
