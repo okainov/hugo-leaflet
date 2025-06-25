@@ -19,6 +19,28 @@ Because both `leaflet` and `leaflet-elevation` are directly included in this rep
 2. Use local copy, but then you need to modify `srcFolder` parameter in `hugo-leaflet.js`, because that's how 
  leaflet-elevation finds D3 (visualisation library). It needs to be full URL, but default it's `http://localhost:1313/assets/leaflet-elevation/src/`
 
+### Configuration options
+
+To avoid hardcoding API key for Thunderforest layer, you can put it in Hugo config:
+
+```yaml
+params:
+  modules:
+    leaflet:
+      thunderforest:
+        apiKey: YOUR_API_KEY_GOES_HERE
+
+```
+
+```toml
+# in params.toml
+[modules.leaflet]
+    [modules.leaflet.thunderforest]
+      apiKey = "YOUR_API_KEY_GOES_HERE"
+```
+
+This is inspired by the improvement in original repo with custom layers ([link](https://gitlab.com/mrubli/hugo-mod-leaflet/-/commit/1c8bce4a66cab2ab0aee2ba4542a52536a5e46db)).
+
 
 ## Examples
 

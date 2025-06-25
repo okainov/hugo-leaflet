@@ -140,6 +140,7 @@ Elevation profile options:
 <div id="map_track_downloads_{{ $uniqueId }}">
 </div>
 
+{{ $apiKey := default (index .Site.Params.modules.leaflet "thunderforest" "apiKey") (.Get "apiKey") }}
 <script>
 	var map_options_{{ $uniqueId }} = {
 		element: 'map_{{ $uniqueId }}',
@@ -154,13 +155,13 @@ Elevation profile options:
 				"org.openstreetmap.standard",
 			],
 			"com.thunderforest.cycle": {
-				"apiKey": "INSERTME"
+				"apiKey": "{{ $apiKey | safeJS }}"
 			},
 			"com.thunderforest.outdoors": {
-				"apiKey": "INSERTME"
+				"apiKey": "{{ $apiKey | safeJS }}"
 			},
 			"com.thunderforest.landscape": {
-				"apiKey": "INSERTME"
+				"apiKey": "{{ $apiKey | safeJS }}"
 			},
 			"org.openstreetmap.standard": {}
 		},

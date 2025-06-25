@@ -1,3 +1,5 @@
+<!--This file is legacy and not used. -->
+
 {{ if or (not .Parent) (not (eq .Parent.Name "leaflet-map")) }}
 {{ errorf "%s: cannot be used outside leaflet-map: %s" .Name .Position }}
 {{ end }}
@@ -9,10 +11,13 @@
 {{ $uniqueMapId := (printf "%s:%d" .Page.File.UniqueID .Parent.Ordinal) | md5 | safeJS }}
 
 {{ $id := .Get "id" }}
+{{ $configId := replace (.Get "id") "." "_" }}
+{{ $apiKey := default (index .Site.Params.modules.leaflet $configId "apiKey") (.Get "apiKey") }}
+
 <script>
 	map_options_{{ $uniqueMapId }}.layers.enabled.push({{ $id }});
 	map_options_{{ $uniqueMapId }}.layers["{{ $id }}"] = {
-		{{ with .Get "apiKey" }}
+		{{ with $apiKey }}
 		apiKey: '{{ . }}',
 		{{ end }}
 	};
